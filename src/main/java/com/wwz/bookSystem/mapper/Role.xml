@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.wwz.bookSystem.mapper.RoleMapper">
+
+	<!-- 缓存配置 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" >  
+      <property name="timeToIdleSeconds" value="3600"/>
+      <property name="timeToLiveSeconds" value="3600"/>
+      <property name="maxEntriesLocalHeap" value="1000"/>  
+      <property name="maxEntriesLocalDisk" value="10000000"/>  
+      <property name="memoryStoreEvictionPolicy" value="LRU"/>  
+  	</cache>
+
+	<!-- 查看角色列表 -->
+    <select id="selectAllRole" resultType="Role">
+    	select * from role
+    </select>
+    
+    <!-- 添加角色 -->
+	<insert id="addRole" parameterType="Role">
+    	insert into role(identity) 
+    	values(#{identity})	
+    </insert>
+    
+    <!-- 删除角色 -->
+    <delete id="deleteRole" parameterType="int">
+    	delete from role
+    	where id=#{id}
+    </delete>
+    
+    <!-- 修改角色信息 -->
+    <update id="updateRole" parameterType="Role">
+    	update role set identity=#{identity}
+    	where id=#{id}
+    </update>
+    
+    <!-- 通过用户ID查询角色的身份 -->
+    <select id="selectIdentityById" parameterType="int" resultType="String">
+    	select identity from role r,user_role ur
+		where r.id=ur.role_id and ur.role_id=#{user_id}		
+    </select>
+    
+    
+    <!-- 查询用户集合,用户的角色不为id对应的角色 -->
+    <select id="selectUserNotEqId" parameterType="int" resultType="User">
+    	select * from user 
+		where id not in(
+			select distinct(user_id) from user_role where role_id=#{id}
+		)
+    </select>
+    
+    <!-- 将用户添加到角色 -->
+    <insert id="addUserToRole" parameterType="map">
+    	insert into user_role(user_id,role_id)
+    	values
+    	<foreach collection="userIds" item="user_id" separator=",">
+    		(#{user_id},#{role_id})
+    	</foreach>
+    </insert>
+    
+    <!-- 将用户移除出角色 -->
+    <delete id="deleteRoleMember" parameterType="User_Role">
+    	delete from user_role
+    	where user_id=#{user_id} and role_id=#{role_id}
+    </delete>
+    
+    
+    <!-- 查询权限集合,权限的角色不为id对应的角色 -->
+    <select id="selectPermissionNotEqId" parameterType="int" resultType="Permission">
+    	select * from permission 
+		where id not in(
+			select distinct(permission_id) from role_permission where role_id=#{id}
+		)
+    </select>
+    
+    <!-- 将权限添加到角色 -->
+    <insert id="addPermissionToRole" parameterType="map">
+    	insert into role_permission(permission_id,role_id)
+    	values
+    	<foreach collection="permissionIds" item="permission_id" separator=",">
+    		(#{permission_id},#{role_id})
+    	</foreach>
+    </insert>
+    
+    <!-- 移除角色的权限 -->
+    <delete id="deleteRolePermission" parameterType="Role_Permission">
+    	delete from role_permission
+    	where role_id=#{role_id} and permission_id=#{permission_id}
+    </delete>
+
+</mapper>

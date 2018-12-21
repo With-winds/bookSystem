@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.wwz.bookSystem.mapper.NoticeMapper">
+
+	<!-- 发布公告 -->
+	<insert id="releaseNotice" parameterType="Notice">
+    	insert into notice(title,content,releaseTime) 
+    	values(#{title},#{content},#{releaseTime})	
+    </insert>
+    
+    <!-- 修改公告 -->
+    <update id="updateNotice" parameterType="Notice">
+    	update notice set title=#{title},content=#{content}
+    	where id=#{id}
+    </update>
+    
+    <!-- 删除公告 -->
+    <delete id="deleteNotice" parameterType="int">
+    	delete from notice
+    	where id=#{id}
+    </delete>
+    
+    <!-- 查询所有公告 -->
+    <select id="selectAllNotice" resultType="Notice">
+    	select * from notice order by id desc
+    </select>
+    
+    <!-- 查看最新公告 -->
+    <select id="selectLatestNotice" resultType="Notice">
+    	select * from notice order by id desc limit 1
+    </select>
+
+</mapper>
