@@ -48,7 +48,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="form-group has-feedback">
       	<div class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-            <input type="text" name="username" id="username" class="form-control" placeholder="Username">
+            <input type="text" name="username" id="username" class="form-control" placeholder="Username" value="ts00001">
         </div>
       </div>
 	  
@@ -56,7 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div class="form-group has-feedback">
         <div class="input-group">
            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-           <input type="password" name="password" id="password" class="form-control" placeholder="Password">
+           <input type="password" name="password" id="password" class="form-control" placeholder="Password" value="ts00001">
         </div>
       </div>
 	  
@@ -156,7 +156,10 @@ $(document).ready(function() {
             }
         });
 });
+
+
 </script>
-	
+
+
 </body>
 </html>

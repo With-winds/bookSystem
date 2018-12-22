@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx" 
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+ 
+ 
+ 	<!-- 配置自动扫描的包 --> 
+    <context:component-scan base-package="com.wwz.bookSystem.controller">
+          <context:include-filter type="annotation"
+          expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+ 
+ 	<!-- 启用MVC注解驱动 -->
+    <mvc:annotation-driven />
+     
+     <!-- 配置允许对静态资源文件的访问 -->
+    <mvc:default-servlet-handler />
+ 
+ 	<!-- 视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+    
+    <!--启用shiro注解 -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
+        <property name="proxyTargetClass" value="true" />
+    </bean>
+    <bean
+        class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager" />
+    </bean>
+    
+    <!--配置静态资源映射,防止静态资源被拦截  -->
+	<mvc:resources location="/resources/" mapping="/resources/**"/>
+	
+	<!-- 无权限跳转页面 -->
+     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
+        <property name="exceptionMappings">  
+            <props>  
+                <prop key="org.apache.shiro.authz.UnauthorizedException">redirect:/nopermission</prop>
+            </props>  
+        </property>  
+    </bean>
+    
+    <!-- 定义文件上传解析器 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设定默认编码 -->
+		<property name="defaultEncoding" value="UTF-8"></property>
+		<!-- 设定文件上传的最大值5MB，5*1024*1024 -->
+		<property name="maxUploadSize" value="5242880"></property>
+	</bean>
+    
+    
+	<!--然后通过 Spring的HandlerExceptionResolver去进行全局捕获，不论你在系统哪里去throw，
+    	只要实现了 HandlerExceptionResovler这个接口，Spring都会拦截下异常进行处理  -->
+	<bean id="exceptionResolver" class="com.wwz.bookSystem.exception.MyException"></bean>
+     
+</beans>

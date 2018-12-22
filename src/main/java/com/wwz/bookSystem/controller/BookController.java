@@ -43,7 +43,7 @@ public class BookController {
 	
 	//跳转到图书列表界面
 	@RequestMapping("/bookList")
-	@RequiresPermissions("book:lidt")
+	@RequiresPermissions("book:list")
     @PermissionName("图书列表")
 	public String bookList(Page page,ModelMap modelMap)
 	{

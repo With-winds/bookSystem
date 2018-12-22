@@ -237,7 +237,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </li>
         
         <!-- 借阅记录 -->
-        <li><a href="welcome"><i class="glyphicon glyphicon-edit"></i> <span>借阅记录</span></a></li>
+        <li><a href="borrowList" target="menuFrame"><i class="glyphicon glyphicon-edit"></i> <span>借阅记录</span></a></li>
         
         <!-- 退出操作 -->
         <li><a href="logout"><i class="glyphicon glyphicon-log-out"></i> <span>退出登录</span></a></li>

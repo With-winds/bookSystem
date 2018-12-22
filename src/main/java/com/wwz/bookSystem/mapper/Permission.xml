@@ -40,7 +40,7 @@
 	<!-- 通过用户ID查询所有权限表达式 -->    
 	<select id="selectResourceById" parameterType="int" resultType="String">
     	select resource from permission p,role_permission rp,user_role ur
-		where p.id=rp.permission_id and rp.role_id=ur.role_id and ur.id=#{user_id}	
+		where p.id=rp.permission_id and rp.role_id=ur.role_id and ur.user_id=#{user_id}	
     </select>
     
     <!-- 通过角色ID查询权限集合 -->
