@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.wwz.bookSystem.mapper.BorrowMapper">
+
+	<!-- 缓存配置 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" >  
+      <property name="timeToIdleSeconds" value="3600"/>
+      <property name="timeToLiveSeconds" value="3600"/>
+      <property name="maxEntriesLocalHeap" value="1000"/>  
+      <property name="maxEntriesLocalDisk" value="10000000"/>  
+      <property name="memoryStoreEvictionPolicy" value="LRU"/>  
+  	</cache>
+  	
+  	<!-- 关联实体类 -->
+	<resultMap type="Borrow" id="borrowMap">  
+        <id property="id" column="id" />  
+        <result property="book_id" column="book_id" />  
+        <result property="user_id" column="user_id" />
+        <result property="borrowDate" column="borrowDate" />  
+        <result property="day" column="day" />  
+        <result property="isOverdue" column="isOverdue" />
+        <result property="isReturn" column="isReturn" />
+        <association property="user" javaType="User" >
+	        <result property="name" column="username"></result>
+	    </association>
+	    <association property="book" javaType="Book" >
+	        <result property="name" column="bookname"></result>
+	    </association>
+    </resultMap>  
+    
+    <!-- 查询所有借阅记录 -->
+    <select id="selectAllBorrow" resultMap="borrowMap">
+    	select b.*,u.name username,book.name bookname from borrow b
+		left join user u on b.user_id=u.id
+		left join book on b.book_id=book.id
+    </select>
+      	
+</mapper>

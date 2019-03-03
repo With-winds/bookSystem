@@ -19,21 +19,44 @@
     <context:component-scan base-package="com.wwz.bookSystem" />
  	
  	<!-- 配置数据源 -->
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
-      <property name="driverClassName"> 
-          <value>com.mysql.jdbc.Driver</value> 
-      </property> 
-      <property name="url"> 
-          <value>jdbc:mysql://localhost:3306/bookSystem?characterEncoding=UTF-8</value> 
-     
-      </property> 
-      <property name="username"> 
-          <value>root</value> 
-      </property> 
-      <property name="password"> 
-          <value>wwzdjj1314</value> 
-      </property>    
-    </bean>
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+	   init-method="init" destroy-method="close">
+	   <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+	   <property name="url" value="jdbc:mysql://localhost:3306/bookSystem?characterEncoding=UTF-8" />
+	   <property name="username" value="root" />
+	   <property name="password" value="wwzdjj1314" />
+	   <!-- 初始化连接数量 -->
+	   <property name="initialSize" value="5" />
+	   <!-- 最大连接数 -->
+	   <property name="maxActive" value="100" />
+	   <!-- 最小连接数 -->
+	   <property name="minIdle" value="5" />
+	   <!-- 配置获取连接等待超时的时间 -->
+	   <property name="maxWait" value="120000" />
+	   <!-- 超过时间限制是否回收 -->
+	   <property name="removeAbandoned" value="true" />
+	   <!-- 超过时间限制多长 -->
+	   <property name="removeAbandonedTimeout" value="1800" />
+	   <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+	   <property name="timeBetweenEvictionRunsMillis" value="120000" />
+	   <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+	   <property name="minEvictableIdleTimeMillis" value="300000" />
+	   <!-- 用来检测连接是否有效的sql，要求是一个查询语句 -->
+	   <property name="validationQuery" value="SELECT 1" />
+	   <!-- 申请连接的时候检测 -->
+	   <property name="testWhileIdle" value="true" />
+	   <!-- 申请连接时执行validationQuery检测连接是否有效，配置为true会降低性能 -->
+	   <property name="testOnBorrow" value="false" />
+	   <!-- 归还连接时执行validationQuery检测连接是否有效，配置为true会降低性能 -->
+	   <property name="testOnReturn" value="false" />
+	   <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+	   <property name="poolPreparedStatements" value="true" />
+	   <property name="maxPoolPreparedStatementPerConnectionSize"
+	      value="20" />
+	   <property name="defaultAutoCommit" value="false" />
+	   <!-- 配置监控统计拦截的filters -->
+	   <property name="filters" value="stat"/>
+	</bean>
      
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
     	<!-- 在mapping.xml可以不用加实体类的包名 -->

@@ -41,7 +41,62 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	  <div class="col-md-1"></div>
   	  
   	  <div class="col-md-10">
-  	    <p>该功能还没完成</p>
+		  <div class="box-body no-padding">
+			<!-- 展示用户的表格 -->
+		    <table class="table table-striped table-hover">
+			  <tr>
+				<th>序号</th>
+				<th>书籍</th>
+				<th>借阅人</th>
+				<th>借阅时间</th>
+				<th>借阅天数</th>
+				<th>超期</th>
+				<th>归还</th>
+			  </tr>
+			  <c:forEach items="${borrows}" var="b" varStatus="st">
+				<tr>
+					<td>${ (page.index-1)*page.count+st.index+1}</td>
+					<td>${ b.book.name }</td>
+					<td>${ b.user.name }</td>
+					<td>${ b.borrowDate }</td>
+					<td>${ b.day }</td>
+					<td>${ b.isOverdue }</td>
+					<td>${ b.isReturn }</td>
+				</tr>
+			  </c:forEach>
+			  <tr>
+			    <td colspan="5">
+				  
+				</td>
+			  </tr>
+		    </table>
+		    <br>
+		    <!-- 表格底部 -->
+		    <div class="row">
+			     
+		      <!-- 分页 -->
+		      <ul class="pagination no-margin pull-right">
+  				<li><a href="?start=0">首  页</a></li>
+			    <li>
+			      <a href="?start=${page.start-page.count}&last=${page.last}&total=${page.total}">
+			        &laquo;
+			      </a>
+			    </li>
+			    <li class="active">
+				  <span>${page.index} <span class="sr-only">(current)</span></span>
+				 </li>
+			     <li>
+			        <a href="?start=${page.start+page.count}&last=${page.last}&total=${page.total}">
+			          &raquo;
+			        </a>
+			     </li>
+			     <li>
+			       <a href="?start=${page.last}&last=${page.last}&total=${page.total}">末  页</a>
+			     </li>
+			  </ul>
+		    </div>
+		    
+		  </div>
   	  </div>
   	  
   	  <div class="col-md-1"></div>
